@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Caesar Cypher</title>
+</head>
+<body>
+    <div>
+        <h1>Caesar's Cypher</h1>
+    </div>
+
+    <div>
+        <div>
+            <div>
+                <label for="text1">Plain text </label>
+                <textarea oninput="validateInputs()" rows="7" id="text1"></textarea>
+            </div>
+
+            <div>
+                <label for="text2">Cypher text </label>
+                <textarea oninput="validateInputs()" rows="7" id="text2"></textarea>
+            </div>
+
+            <div>
+                <label for="key">Key</label>
+                <input oninput="validateInputs()" type="number" id="key" placeholder="key" name="key">
+            </div>
+
+            <div id="alert" style="display:none"></div>
+
+            <button id="crypt-btn" onclick="crypt()">
+                Crypt
+            </button>
+
+            <button id="decrypt-btn" onclick="decrypt()">
+                Decrypt
+            </button>
+
+        </div>
+    </div>
+</body>
+
+<script src="index.js"></script>
+
+</html>
