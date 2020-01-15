@@ -49,7 +49,47 @@ def gcd(a, b):
 def coprime(a, b):
     return gcd(a, b) == 1
 
+def modulo_inverse(n, m):
+    for i in range(1, m):
+        if (n * i) % m == 1:
+            return i
+    return -1
 
+def generateAlicePublic():
+    p, q = generatePQ()
+    phi = computePhi(p, q)
+    e = random.randint(1, phi - 1)
+    while not coprime(e, phi):
+        e = random.randint(1, phi - 1)
+    d = modulo_inverse(e, phi)
+    return (p * q, e), d
+
+def determineBlockSizes(n):
+    low_k = 1
+    alphabet_size = len(alphabet)
+    acc = alphabet_size
+    while acc < n:
+        acc = acc * alphabet_size
+        low_k += 1
+    k = random.randint(2, low_k)
+    l = random.randint(low_k + 1, 2*low_k)
+    return k, l
+
+def splitMessage(message,k):
+    put_in_block = 0
+    blocks = []
+    for char in message:
+        if put_in_block == 0:
+            blocks.append(char)
+        else:
+            blocks[-1] += char
+        put_in_block += 1
+        if put_in_block == k:
+            put_in_block = 0
+    while put_in_block < k:
+        blocks[-1] += " "
+        put_in_block += 1
+    return blocks
 
 if __name__ == '__main__':
     n = gcd(18, 36)
