@@ -3,7 +3,7 @@ import random
 
 LOWER = 10000
 UPPER = 20000
-alphabet = ['_', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
+alphabet = [' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
               'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
               'U', 'V', 'W', 'X', 'Y', 'Z']
 
@@ -91,6 +91,81 @@ def splitMessage(message,k):
         put_in_block += 1
     return blocks
 
+
+def numerical_equivalent(message_blocks):
+    numbers = []
+    alphabet_size = len(alphabet)
+    for block in message_blocks:
+        reverse = block[::-1]
+        current_pow = 0
+        block_number = 0
+        for char in reverse:
+            block_number += alphabet.index(char) * (alphabet_size ** current_pow)
+            current_pow += 1
+        numbers.append(block_number)
+    return numbers
+
+
+def encrypt_blocks(numerical_eqivalence, e, n):
+    encrypted_blocks = []
+    for number in numerical_eqivalence:
+        enc = pow(number, e, n)
+        encrypted_blocks.append(enc)
+    return encrypted_blocks
+
+
+def text_equivalent(numerical_blocks, l):
+    text_blocks = []
+    alphabet_size = len(alphabet)
+    current_pow = l - 1
+    for number in numerical_blocks:
+        text = ""
+        while current_pow >= 0:
+            digit = number // (alphabet_size ** current_pow)
+            number = number % (alphabet_size ** current_pow)
+            letter = alphabet[digit]
+            text += letter
+            current_pow -= 1
+        text_blocks.append(text)
+        current_pow = l - 1
+    return text_blocks
+
+
+def decrypt_blocks(num_blocks, d, n):
+    decrypted = []
+    for number in num_blocks:
+        dec = pow(number, d, n)
+        decrypted.append(dec)
+    return decrypted
+
+
+def encrypt(message):
+    private, d = generateAlicePublic()
+    n = private[0]
+    e = private[1]
+    k, l = determineBlockSizes(n)
+    numerical_blocks = numerical_equivalent(splitMessage(message, k))
+    encrypted_numbers = encrypt_blocks(numerical_blocks, e, n)
+    text_encrypted = text_equivalent(encrypted_numbers, l)
+    print("Encrypted text is :")
+    print(text_encrypted)
+    return encrypted_numbers, d, n, k
+
+
+def decrypt(encrypted_blocks, d, n, k):
+    decrypted_blocks = decrypt_blocks(encrypted_blocks, d, n)
+    text_decrypted = text_equivalent(decrypted_blocks, k)
+    print("Decrypted text is:")
+    print(text_decrypted)
+    return text_decrypted
+
+
+def main():
+    while True:
+        message = input("Give the message(" "A-Z): ")
+        numbers, d, n, k = encrypt(message)
+        decrypt(numbers, d, n, k)
+
+
 if __name__ == '__main__':
-    n = gcd(18, 36)
-    print(n)
+    main()
