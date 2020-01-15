@@ -92,6 +92,7 @@ def splitMessage(message,k):
     return blocks
 
 
+
 def numerical_equivalent(message_blocks):
     numbers = []
     alphabet_size = len(alphabet)
@@ -131,7 +132,7 @@ def text_equivalent(numerical_blocks, l):
     return text_blocks
 
 
-def decrypt_blocks(num_blocks, d, n):
+def decryptBlocks(num_blocks, d, n):
     decrypted = []
     for number in num_blocks:
         dec = pow(number, d, n)
@@ -147,14 +148,16 @@ def encrypt(message):
     numerical_blocks = numerical_equivalent(splitMessage(message, k))
     encrypted_numbers = encrypt_blocks(numerical_blocks, e, n)
     text_encrypted = text_equivalent(encrypted_numbers, l)
+
     print("Encrypted text is :")
     print(text_encrypted)
     return encrypted_numbers, d, n, k
 
 
 def decrypt(encrypted_blocks, d, n, k):
-    decrypted_blocks = decrypt_blocks(encrypted_blocks, d, n)
+    decrypted_blocks = decryptBlocks(encrypted_blocks, d, n)
     text_decrypted = text_equivalent(decrypted_blocks, k)
+
     print("Decrypted text is:")
     print(text_decrypted)
     return text_decrypted
@@ -165,7 +168,6 @@ def main():
         message = input("Give the message(" "A-Z): ")
         numbers, d, n, k = encrypt(message)
         decrypt(numbers, d, n, k)
-
 
 if __name__ == '__main__':
     main()
